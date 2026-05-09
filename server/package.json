@@ -1,12 +1,13 @@
 {
     "name": "server",
     "version": "1.0.0",
-    "description": "server for roulette game",
+    "description": "server for ruleta publica",
     "main": "server.ts",
     "scripts": {
-        "test": "jest"
+        "test": "jest",
+        "start": "ts-node server.ts"        
     },
-    "author": "k-stopczynska",
+    "author": "Naycol Rodolfo Linares Villasmil",
     "license": "ISC",
     "dependencies": {
         "@types/config": "^3.3.0",

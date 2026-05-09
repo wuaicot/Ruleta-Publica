@@ -1,12 +1,13 @@
 import { Engine, Scene } from 'react-babylonjs';
 import { Vector3 } from '@babylonjs/core';
 import { Suspense, useState, useEffect, useCallback } from 'react';
+import { observer } from 'mobx-react';
 import { RouletteAnimate } from './RouletteAnimate';
 import { Ground } from './Ground';
 import { gameStore } from '../../store/gameStore';
 import { GameLoop } from '../../types';
 
-export const MainScene = () => {
+export const MainScene = observer(() => {
 	const message = gameStore.msg;
 	const RADIUS = 7;
 	const assetCorrection = 0;
@@ -118,4 +119,4 @@ export const MainScene = () => {
 			</Scene>
 		</Engine>
 	);
-};
+});

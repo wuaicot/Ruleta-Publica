@@ -1,52 +1,72 @@
 import { useState, useCallback, useContext, useRef } from 'react';
+import io, { Socket } from 'socket.io-client';
 import { gameStore, GameContext } from '../store/gameStore';
+import { SOCKET_URL } from '../config/default';
+import { EVENTS } from '../utils/utils';
+import { GameData, GameLoop } from '../types';
 
 export const useServer = () => {
 	const [error, setError] = useState('');
-	const [message, setMessage] = useState<any>();
-	const [loading, setLoading] = useState(false);
+	const socketRef = useRef<Socket | null>(null);
 	const { setMsg } = useContext(GameContext);
-
-	const sendGameData = (clientData: any) => {
-		ws.current!.send(clientData);
-	};
-
-	const ws = useRef<WebSocket>();
-	const URL = 'wss://dour-ambitious-tarragon.glitch.me/';
-
-	const clientOnError = useCallback(
-		(event: Event) => {
-			setError(
-				`something went wrong with connection to ${URL}, try again`,
-			);
-		},
-		[error],
-	);
-
-	const clientOnMessage = useCallback(
-		(message: any) => {
-			setMessage(JSON.parse(message.data));
-			setMsg(JSON.parse(message.data));
-			sendGameData(JSON.stringify(gameStore.gameData));
-		},
-		[message],
-	);
+	const prevStageRef = useRef<GameLoop | undefined>(undefined);
 
 	const connect = useCallback(() => {
-		setLoading(true);
+		setError('');
 		try {
-			ws.current = new WebSocket(URL);
-			ws.current.addEventListener('error', clientOnError);
-			ws.current.addEventListener('message', clientOnMessage);
+			if (!socketRef.current) {
+				const socket = io(SOCKET_URL, {
+					transports: ['websocket', 'polling'],
+				});
+				socketRef.current = socket;
+
+				socket.on('connect_error', () => {
+					setError(
+						`something went wrong with connection to ${SOCKET_URL}, try again`,
+					);
+				});
+
+				socket.on(EVENTS.SERVER.STAGE_CHANGE, (value: string) => {
+					const message: GameData = JSON.parse(value);
+					setMsg(message);
+					const currentStage = message.gameStage;
+					const previousStage = prevStageRef.current;
+					if (
+						currentStage === GameLoop.WINNER &&
+						previousStage !== GameLoop.WINNER &&
+						gameStore.playerId
+					) {
+						const myWinner = message.winners.find(
+							(winner) => winner.playerId === gameStore.playerId,
+						);
+						gameStore.applyRoundSettlement(myWinner?.win ?? 0);
+					}
+					prevStageRef.current = currentStage;
+					socket.emit(
+						EVENTS.CLIENT.CLIENT_DATA,
+						JSON.stringify(gameStore.gameData),
+					);
+				});
+
+				socket.on(EVENTS.SERVER.JOINED_GAME, (value: string) => {
+					console.log(JSON.parse(value));
+				});
+			}
+
+			socketRef.current.emit(
+				EVENTS.CLIENT.JOIN_GAME,
+				JSON.stringify(gameStore.gameData),
+			);
 		} catch (e) {
 			setError((e as Error).message);
 		}
-		setLoading(false);
+	}, [setMsg]);
+
+	const disconnect = useCallback(() => {
+		socketRef.current?.disconnect();
+		socketRef.current = null;
+		prevStageRef.current = undefined;
 	}, []);
 
-    const disconnect = () => {
-		ws.current?.close();
-	};
-
-	return { error, message, connect, disconnect };
+	return { error, connect, disconnect };
 };

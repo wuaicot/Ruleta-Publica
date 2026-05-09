@@ -25,8 +25,8 @@ Users should be able to:
 
 ### Links
 
--   Repository URL: https://github.com/k-stopczynska/roulette
--   Live Demo URL: https://magic-roulette.surge.sh/
+-   Repository URL: https://github.com/wuaicot/Ruleta-Publica.git
+-   Live Demo URL: 
 
 ### Built with
 
@@ -47,5 +47,5 @@ Users should be able to:
 
 ### Play locally on your machine:
 
-type: `git clone [repository URL]` and then:
+type: `git clone https://github.com/wuaicot/Ruleta-Publica.git` and then:
 `npm install` to install dependencies and `npm start` for running front-end and in server directory install nodemon and: `ts-node server.ts` for running backend

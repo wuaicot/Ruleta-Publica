@@ -1,4 +1,5 @@
 import { useCallback } from 'react';
+import { observer } from 'mobx-react';
 import { useDrop } from 'react-dnd';
 import { gameStore } from '../../store/gameStore';
 import { BoardItem } from './BoardItem';
@@ -7,7 +8,7 @@ import { matrix } from '../../utils/utils';
 import { Bet } from '../../../../common/types';
 import './Board.css';
 
-export const Board = () => {
+export const Board = observer(() => {
 	// eslint-disable-next-line
 	const [{ isOver }, drop] = useDrop(() => ({
 		accept: 'chips',
@@ -60,4 +61,4 @@ export const Board = () => {
 				))}
 		</div>
 	);
-};
+});

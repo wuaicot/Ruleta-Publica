@@ -1,10 +1,11 @@
 import { useContext, useEffect, useState, useCallback } from "react";
+import { observer } from "mobx-react";
 import ProgressTimer from "react-progress-bar-timer";
 import { GameContext, gameStore } from "../../store/gameStore";
 import { GameLoop, GameData, Winner } from "../../types";
 import "./GameLoopTable.css";
 
-export const GameLoopTable = () => {
+export const GameLoopTable = observer(() => {
     const { setBoardClear } = useContext(GameContext);
     const [started, setStarted] = useState(false);
     const [gameTime, setGameTime] = useState(25);
@@ -105,4 +106,4 @@ export const GameLoopTable = () => {
             )}
         </div>
     );
-};
+});

@@ -21,6 +21,8 @@ class GameStore {
 	betLocation = { x: 0, y: 0 };
 	bets: Bet[] = [];
 	msg: GameData | null;
+	startingBalance = 1000;
+	balance = 1000;
 
 	//actions
 
@@ -51,6 +53,15 @@ class GameStore {
 		this.msg = newMessage;
 	}
 
+	applyRoundSettlement(winAmount: number) {
+		const roundBet = this.totalBetAmount;
+		this.balance = this.balance - roundBet + winAmount;
+	}
+
+	resetSessionBalance() {
+		this.balance = this.startingBalance;
+	}
+
 	// computed and tracking function
 	get newBet() {
 		return {
@@ -74,6 +85,14 @@ class GameStore {
 		};
 	}
 
+	get totalBetAmount() {
+		return this.bets.reduce((sum, bet) => sum + bet.betAmount, 0);
+	}
+
+	get totalProfitOrLoss() {
+		return this.balance - this.startingBalance;
+	}
+
 	constructor(
 		initialId: string,
 		initialBoard: string,
@@ -90,7 +109,10 @@ class GameStore {
 			playerId: observable,
 			boardItemOccupied: observable,
 			chipsTaken: observable,
+			betLocation: observable,
+			bets: observable,
 			msg: observable,
+			balance: observable,
 			setPlayerId: action.bound,
 			setBoardItemOccupied: action.bound,
 			setChipsTaken: action.bound,
@@ -98,9 +120,13 @@ class GameStore {
 			setAllBets: action.bound,
 			setMsg: action.bound,
 			setBoardClear: action.bound,
+			applyRoundSettlement: action.bound,
+			resetSessionBalance: action.bound,
 			newBet: computed,
 			gameData: computed,
 			winSpin: computed,
+			totalBetAmount: computed,
+			totalProfitOrLoss: computed,
 		});
 	}
 }

@@ -6,11 +6,11 @@ export interface GameData {
 }
 
 export enum GameLoop {
-    PLACE_BET = "PLACE BETS",
-    NO_MORE_BETS = "NO MORE BETS",
-    SPIN_WHEEL = "SPIN WHEEL",
-    WINNER = "WINNER",
-    EMPTY_BOARD = "EMPTY BOARD",
+    PLACE_BET = "HAGA SU APUESTA AHORA",
+    NO_MORE_BETS = "NO MAS APUESTA",
+    SPIN_WHEEL = "GIRAR LA RULETA",
+    WINNER = "GANADOR",
+    EMPTY_BOARD = "LIMPIAR EL TABLERO",
 }
 
 export interface Winner {

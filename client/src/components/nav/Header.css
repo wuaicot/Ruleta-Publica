@@ -28,3 +28,9 @@ a {
 	gap: 1em;
 	min-width: 15%;
 }
+
+.stats-toggle-button {
+	height: 34px;
+	font-size: 0.75rem;
+	padding: 0 0.7rem;
+}

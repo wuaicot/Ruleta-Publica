@@ -1,1 +1,3 @@
-export const SOCKET_URL = 'https://verdant-cherry-saltasaurus.glitch.me/';
+/** Socket.IO server URL. Override with REACT_APP_SOCKET_URL when deploying. */
+export const SOCKET_URL =
+	process.env.REACT_APP_SOCKET_URL ?? 'http://localhost:8888';

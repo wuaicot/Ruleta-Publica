@@ -1,7 +1,11 @@
 {
-  "name": "roulette",
-  "version": "0.1.0",
+  "name": "ruleta",
+  "version": "0.2.0",
   "private": true,
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/wuaicot/Ruleta-Publica.git"
+  },
   "dependencies": {
     "@babylonjs/core": "^5.57.0",
     "@babylonjs/gui": "^5.57.0",

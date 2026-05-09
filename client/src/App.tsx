@@ -11,6 +11,7 @@ import { useServer } from './hooks/useServer';
 import { GameLoop, GameData } from './types';
 import './App.css';
 import { useCallback } from 'react';
+import { observer } from 'mobx-react';
 
 function App() {
 	const { error, connect, disconnect } = useServer();
@@ -42,4 +43,4 @@ function App() {
 	);
 }
 
-export default App;
+export default observer(App);

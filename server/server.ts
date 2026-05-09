@@ -5,7 +5,6 @@ import config from 'config';
 import { Timer } from 'easytimer.js';
 import { GameLoop, GameData, Winner, ClientData } from '../common/types';
 import {
-	isIdUnique,
 	isUserDataUnique,
 	getRandomNumber,
 	resetBoard,
@@ -13,9 +12,9 @@ import {
 	EVENTS,
 } from './utils';
 
-const port = config.get<string>('port');
-const host = config.get<number>('host');
-const corsOrigin = config.get<string>('corsOrigin');
+const port = config.get<number>('port');
+const host = config.get<string>('host');
+const corsOrigin = config.get<string | boolean>('corsOrigin');
 
 const app = express();
 const httpServer = createServer(app);
@@ -39,6 +38,8 @@ let win = 0;
 let clientData: ClientData = { playerId: '', bets: [] };
 const usersData: ClientData[] = [];
 const uniqueData: ClientData[] = [];
+/** Maps Socket.IO connection id → client playerId so disconnect removes the right winner row */
+const socketPlayerIds = new Map<string, string>();
 
 const sendGameData = (gameData: GameData) => {
 	io.emit(EVENTS.SERVER.STAGE_CHANGE, JSON.stringify(gameData));
@@ -85,23 +86,30 @@ io.on(EVENTS.CONNECTION, (socket: Socket) => {
 	socket.on(EVENTS.CLIENT.JOIN_GAME, (data: string) => {
 		timer.start();
 		saveClientsData(data);
+		if (clientData.playerId) {
+			socketPlayerIds.set(socket.id, clientData.playerId);
+		}
 	});
 	socket.on(EVENTS.CLIENT.CLIENT_DATA, (data: string) => {
 		saveClientsData(data);
-		if (
-			winners.length === 0 ||
-			!isIdUnique(winners, clientData.playerId).includes(false)
-		) {
-			winners.push({ playerId: clientData.playerId, win: win });
+		const pid = clientData.playerId;
+		if (pid) {
+			socketPlayerIds.set(socket.id, pid);
+		}
+		if (!pid) return;
+		if (!winners.some((w) => w.playerId === pid)) {
+			winners.push({ playerId: pid, win });
 		}
 	});
-});
-
-io.on(EVENTS.CLIENT.CLOSE, (socket: Socket) => {
-	const indexToRemove = winners.findIndex(
-		(data) => data.playerId === socket.id,
-	);
-	winners.splice(indexToRemove, 1);
+	socket.on('disconnect', () => {
+		const pid = socketPlayerIds.get(socket.id);
+		socketPlayerIds.delete(socket.id);
+		if (!pid) return;
+		const indexToRemove = winners.findIndex((w) => w.playerId === pid);
+		if (indexToRemove !== -1) {
+			winners.splice(indexToRemove, 1);
+		}
+	});
 });
 
 httpServer.listen(port, host, () => {
