@@ -14,7 +14,7 @@ describe("gameStore", () => {
         expect(chipsToSpawn(25)).toStrictEqual([
             {
                 url: assetsURL.green,
-                alt: "chip purple value 25",
+                alt: "chip green value 25",
                 value: 25,
                 id: "25",
             },
@@ -31,7 +31,7 @@ describe("gameStore", () => {
             {
                 url: assetsURL.yellow,
                 value: 100,
-                alt: "chip black value 100",
+                alt: "chip yellow value 100",
                 id: "100",
             },
         ]);
