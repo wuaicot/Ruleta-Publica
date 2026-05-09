@@ -50,7 +50,7 @@ export const Header = (props: HeaderProps) => {
 				<Button className='logo'>Ruleta Pública</Button>
 			</a>
 			<Button className='stats-toggle-button' onClick={toggleStats}>
-				Mi info.
+				Mi info
 			</Button>
 			<div className='audio-login-container'>
 				{!loggedIn && (
