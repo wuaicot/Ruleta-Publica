@@ -1,4 +1,4 @@
-import express from 'express';
+import express, { Request, Response } from 'express';
 import { Server, Socket } from 'socket.io';
 import { createServer } from 'http';
 import config from 'config';
@@ -25,7 +25,7 @@ const io = new Server(httpServer, {
 	},
 });
 
-app.get('/', (_, res) => {
+app.get('/', (_: Request, res: Response) => {
 	res.send('server is running on port 8888');
 });
 

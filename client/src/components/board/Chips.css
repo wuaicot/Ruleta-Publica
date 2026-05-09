@@ -11,12 +11,32 @@
 	padding: 1em 0;
 }
 
-img {
+.chip-container img {
 	max-width: 5em;
 	max-height: 5em;
 	cursor: pointer;
 }
 
-img:hover {
+.chip-container img:hover {
 	scale: 1.2;
+}
+
+.board-chip {
+	max-width: 5em;
+	max-height: 5em;
+	cursor: pointer;
+}
+
+.board-chip:hover {
+	scale: 1.2;
+}
+
+.board-chip--placed {
+	position: absolute;
+	top: var(--chip-top);
+	left: var(--chip-left);
+}
+
+.board-chip--dragging {
+	opacity: 0.5;
 }

@@ -12,7 +12,6 @@ export const Chips = observer(() => {
                     alt={chips.alt}
                     url={chips.url}
                     key={Math.random()}
-                    style={{ top: 'auto', left: 'auto' }}
                 />
             ))}
         </div>

@@ -1,7 +1,6 @@
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import { gameStore, GameContext } from './store/gameStore';
-import { Loader } from './components/difStates/Loader';
 import { Error } from './components/difStates/Error';
 import { Header } from './components/nav/Header';
 import { Dashboard } from './components/nav/Dashboard';
@@ -17,15 +16,12 @@ function App() {
 	const { error, connect, disconnect } = useServer();
 
 	const setPointerEvents = useCallback((message: GameData | null) => {
+		if (error) return 'App no-pointers';
 		if (!message) return 'App';
-		if (message) {
-			return message.gameStage === GameLoop.PLACE_BET
-				? 'App'
-				: 'App no-pointers';
-		} else if (error) {
-			return 'App no-pointers';
-		}
-	}, []);
+		return message.gameStage === GameLoop.PLACE_BET
+			? 'App'
+			: 'App no-pointers';
+	}, [error]);
 
 	return (
 		<DndProvider backend={HTML5Backend}>

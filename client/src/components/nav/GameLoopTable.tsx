@@ -5,6 +5,10 @@ import { GameContext, gameStore } from "../../store/gameStore";
 import { GameLoop, GameData, Winner } from "../../types";
 import "./GameLoopTable.css";
 
+function winnerItemClassName(winnerId: string, playerId: string): string {
+    return winnerId === playerId ? "winner-item-mine" : "winner-item";
+}
+
 export const GameLoopTable = observer(() => {
     const { setBoardClear } = useContext(GameContext);
     const [started, setStarted] = useState(false);
@@ -50,31 +54,7 @@ export const GameLoopTable = observer(() => {
             }
             return content;
         }
-    }, []);
-
-    const isWinnerItemMine = useCallback((winner: string, playerId: string) => {
-        return winner === playerId ? "winner-item-mine" : "winner-item";
-    }, []);
-
-    const getWinners = useCallback((message: GameData) => {
-        const content: React.ReactNode[] = [];
-        if (message) {
-            message.winners.map((winner: Winner) => {
-                content.push(
-                    <div
-                        className={isWinnerItemMine(
-                            winner.playerId,
-                            gameStore.playerId,
-                        )}
-                    >
-                        <p className="user-id">User id: {winner.playerId}</p>
-                        <p className="win">Win: {winner.win}</p>
-                    </div>,
-                );
-            });
-        }
-        return content;
-    }, []);
+    }, [setBoardClear]);
 
     return (
         <div className="table-container">
@@ -93,12 +73,22 @@ export const GameLoopTable = observer(() => {
                         />
                     </div>
                     <ul className="winners-list">
-                        {getWinners(message).map((cont: React.ReactNode) => (
+                        {message.winners.map((winner: Winner) => (
                             <li
                                 className="winner-item-wrapper"
-                                key={Math.random()}
+                                key={winner.playerId}
                             >
-                                {cont}
+                                <div
+                                    className={winnerItemClassName(
+                                        winner.playerId,
+                                        gameStore.playerId,
+                                    )}
+                                >
+                                    <p className="user-id">
+                                        User id: {winner.playerId}
+                                    </p>
+                                    <p className="win">Win: {winner.win}</p>
+                                </div>
                             </li>
                         ))}
                     </ul>

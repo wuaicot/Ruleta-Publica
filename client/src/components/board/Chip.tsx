@@ -1,12 +1,13 @@
-import { useContext } from "react";
+import { useCallback, useContext, useLayoutEffect, useRef } from "react";
 import { useDrag } from "react-dnd";
 import { gameStore, GameContext } from "../../store/gameStore";
+import "./Chips.css";
 
 interface ChipProps {
     id: string;
     alt: string;
     url: string;
-    style: {
+    style?: {
         top: number | string;
         left: number | string;
     };
@@ -19,10 +20,16 @@ interface DropResultType {
 
 let dropResult: DropResultType | null;
 
+function chipIsPlacedOnBoard(style: ChipProps["style"]): boolean {
+    if (!style) return false;
+    return typeof style.top === "number" && typeof style.left === "number";
+}
+
 export const Chip = (props: ChipProps) => {
     const { setChipsTaken, setBoardItemOccupied, setBetLocation, setAllBets } =
         useContext(GameContext);
     const { url, alt, id, style } = props;
+    const placedOnBoard = chipIsPlacedOnBoard(style);
     const [{ isDragging }, drag] = useDrag(() => ({
         type: "chips",
         item: { id: id },
@@ -40,16 +47,42 @@ export const Chip = (props: ChipProps) => {
         }),
     }));
 
+    const chipRef = useRef<HTMLImageElement | null>(null);
+    const bindChipRef = useCallback(
+        (node: HTMLImageElement | null) => {
+            chipRef.current = node;
+            drag(node);
+        },
+        [drag],
+    );
+
+    useLayoutEffect(() => {
+        const el = chipRef.current;
+        if (!el) return;
+        if (placedOnBoard && style) {
+            el.style.setProperty("--chip-top", `${style.top}px`);
+            el.style.setProperty("--chip-left", `${style.left}px`);
+        } else {
+            el.style.removeProperty("--chip-top");
+            el.style.removeProperty("--chip-left");
+        }
+    }, [placedOnBoard, style]);
+
+    const chipClass = [
+        "board-chip",
+        placedOnBoard ? "board-chip--placed" : "",
+        isDragging ? "board-chip--dragging" : "",
+    ]
+        .filter(Boolean)
+        .join(" ");
+
     return (
         <img
-            ref={drag}
+            ref={bindChipRef}
             src={url}
             alt={alt}
             id={id}
-            style={{
-                ...style,
-                opacity: isDragging ? "0.5" : "1",
-            }}
+            className={chipClass}
         />
     );
 };

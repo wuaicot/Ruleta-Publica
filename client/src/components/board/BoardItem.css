@@ -1,8 +1,19 @@
+.board-item-drop-target {
+    border: 1px solid white;
+    box-shadow: none;
+}
+
+.board-item-drop-target--over {
+    border: 1px solid rgb(255, 173, 0);
+    box-shadow:
+        0 0 0.7em 0 rgb(255, 173, 0),
+        inset 0 0 0.7em 0 rgb(255, 173, 0);
+}
+
 .item {
     display: flex;
     align-items: center;
     justify-content: center;
-    border: 1px solid white;
     color: white;
     font-size: 1.5rem;
     font-weight: bold;

@@ -1,6 +1,5 @@
-import { jest } from "@jest/globals";
 import { assetsURL } from "../utils/utils";
-import { chipsToSpawn, indexSpin, calculateWinSpin } from "./gameStore";
+import { chipsToSpawn, calculateWinSpin } from "./gameStore";
 
 describe("gameStore", () => {
     test("returns correct chips to spawn on board", () => {
