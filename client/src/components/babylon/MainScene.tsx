@@ -9,11 +9,11 @@ import { GameLoop } from '../../types';
 export const MainScene = () => {
 	const message = gameStore.msg;
 	const RADIUS = 7;
-	const assetCorrection = 0;
+	const assetCorrection = 0;//0
 	const initialBallPos: [number, number, number] = [
 		RADIUS,
 		assetCorrection,
-		-2,
+		-1.50,//-2
 	];
 	const [rpm, setRpm] = useState(1);
 	const [winSpin, setWinSpin] = useState(0);
@@ -23,7 +23,7 @@ export const MainScene = () => {
 	const accelerate = useCallback(() => {
 		setAcc(true);
 		const rpmAccInterval = setInterval(() => {
-            setRpm((prevValue) => (prevValue += 10));
+            setRpm((prevValue) => (prevValue += 10));// antes 10
             	setPos((prevValue) => [
 					prevValue[0] + 0.40,
 					prevValue[1],
@@ -38,13 +38,13 @@ export const MainScene = () => {
 
 	const deccelerate = useCallback(() => {
 		const rpmDecInterval = setInterval(() => {
-			setRpm((prevValue) => (prevValue -= 6.5));
+			setRpm((prevValue) => (prevValue -= 6.50));//6.50
 			setPos((prevValue) => [
 				prevValue[0] - 0.26,
 				prevValue[1],
 				prevValue[2] + .10,
 			]);
-		}, 550);
+		}, 550);//550
 
 		setTimeout(() => {
 			setWinSpin(-gameStore.winSpin.winSpin);
@@ -64,7 +64,7 @@ export const MainScene = () => {
 				}, 3000);
 				setTimeout(() => {
 					deccelerate();
-				}, 6000);
+				}, 6000);//6000
 			}
 		}
 		// eslint-disable-next-line
@@ -75,7 +75,7 @@ export const MainScene = () => {
 			<Scene>
 				<hemisphericLight
 					name='light1'
-					intensity={0.2}
+					intensity={0.2}//0.2
 					direction={Vector3.Up()}
 				/>
 				<freeCamera

@@ -30,7 +30,7 @@ export const RouletteMesh = (props: BabylonMeshProps) => {
         rouletteTask.loadedMeshes[0].scaling = new Vector3(8, 8, 8);
         //build in ground moved
 		rouletteTask.loadedMeshes[2].position = new Vector3(200, 200, 200);
-		rouletteTask.loadedMeshes[3].position = new Vector3(200, 200, 200);
+		rouletteTask.loadedMeshes[3].position = new Vector3(400, 400, 400);
 		//20, 21, 22, 24, 25, 29, 30 numbers, besels and colors- moving wheel
 		rouletteTask.loadedMeshes[20].rotation = new Vector3(0, spin, 0);
 		rouletteTask.loadedMeshes[21].rotation = new Vector3(0, spin, 0);

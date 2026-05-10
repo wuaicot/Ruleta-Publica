@@ -1,4 +1,5 @@
 import { Vector3 } from "@babylonjs/core";
+import "react-babylonjs";
 
 export const BallMesh = (props: any) => {
     const { pos } = props;

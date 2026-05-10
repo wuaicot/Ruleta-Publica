@@ -1,5 +1,6 @@
 import { Vector3 } from '@babylonjs/core';
 import { BallMesh } from './BallMesh';
+import 'react-babylonjs';
 
 interface BarrierProps {
 	spin: number;
