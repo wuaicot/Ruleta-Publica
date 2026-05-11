@@ -57,29 +57,36 @@ export const MainScene = () => {
 	}, []);
 
 	useEffect(() => {
+		const animateZoom = (targetY: number, duration: number) => {
+			const startY = cameraY;
+			const startTime = performance.now();
+
+			const step = (currentTime: number) => {
+				const elapsed = currentTime - startTime;
+				const progress = Math.min(elapsed / duration, 1);
+				
+				// Cubic Out Easing: f(t) = 1 - (1-t)^3
+				const easeOutCubic = 1 - Math.pow(1 - progress, 3);
+				const currentY = startY + (targetY - startY) * easeOutCubic;
+				
+				setCameraY(currentY);
+
+				if (progress < 1) {
+					requestAnimationFrame(step);
+				}
+			};
+
+			requestAnimationFrame(step);
+		};
+
 		if (message) {
 			if (message.gameStage === GameLoop.WINNER) {
-				// Zoom in effect
-				const zoomInterval = setInterval(() => {
-					setCameraY(prev => {
-						if (prev > 8) return prev - 0.2;
-						clearInterval(zoomInterval);
-						return prev;
-					});
-				}, 50);
+				animateZoom(10, 1200); // Zoom in más rápido (1.2s)
 			}
-
 			if (message.gameStage === GameLoop.EMPTY_BOARD) {
 				setPos(initialBallPos);
-				setRpm(1); // Reset RPM to baseline
-				// Zoom out effect
-				const zoomOutInterval = setInterval(() => {
-					setCameraY(prev => {
-						if (prev < 15) return prev + 0.2;
-						clearInterval(zoomOutInterval);
-						return prev;
-					});
-				}, 50);
+				setRpm(1); 
+				animateZoom(15, 1000); // Zoom out más rápido y "snappy"
 			}
 			if (message.gameStage === GameLoop.NO_MORE_BETS) {
 				setTimeout(() => {
@@ -87,7 +94,7 @@ export const MainScene = () => {
 				}, 3000);
 				setTimeout(() => {
 					deccelerate();
-				}, 6000);//6000
+				}, 6000);
 			}
 		}
 		// eslint-disable-next-line
@@ -98,7 +105,7 @@ export const MainScene = () => {
 			<Scene>
 				<hemisphericLight
 					name='light1'
-					intensity={0.2}//0.2
+					intensity={0.2}
 					direction={Vector3.Up()}
 				/>
 				<freeCamera
