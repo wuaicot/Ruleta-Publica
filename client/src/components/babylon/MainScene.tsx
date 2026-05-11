@@ -19,6 +19,7 @@ export const MainScene = () => {
 	const [winSpin, setWinSpin] = useState(0);
 	const [acc, setAcc] = useState(false);
 	const [pos, setPos] = useState(initialBallPos);
+	const [cameraY, setCameraY] = useState(15);
 
 	const accelerate = useCallback(() => {
 		setAcc(true);
@@ -57,9 +58,28 @@ export const MainScene = () => {
 
 	useEffect(() => {
 		if (message) {
+			if (message.gameStage === GameLoop.WINNER) {
+				// Zoom in effect
+				const zoomInterval = setInterval(() => {
+					setCameraY(prev => {
+						if (prev > 8) return prev - 0.2;
+						clearInterval(zoomInterval);
+						return prev;
+					});
+				}, 50);
+			}
+
 			if (message.gameStage === GameLoop.EMPTY_BOARD) {
 				setPos(initialBallPos);
 				setRpm(1); // Reset RPM to baseline
+				// Zoom out effect
+				const zoomOutInterval = setInterval(() => {
+					setCameraY(prev => {
+						if (prev < 15) return prev + 0.2;
+						clearInterval(zoomOutInterval);
+						return prev;
+					});
+				}, 50);
 			}
 			if (message.gameStage === GameLoop.NO_MORE_BETS) {
 				setTimeout(() => {
@@ -83,7 +103,7 @@ export const MainScene = () => {
 				/>
 				<freeCamera
 					name='camera1'
-					position={new Vector3(0, 15, 0)}
+					position={new Vector3(0, cameraY, 0)}
 					setTarget={[Vector3.Zero()]}
 				/>
 
