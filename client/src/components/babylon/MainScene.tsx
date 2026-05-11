@@ -59,6 +59,7 @@ export const MainScene = () => {
 		if (message) {
 			if (message.gameStage === GameLoop.EMPTY_BOARD) {
 				setPos(initialBallPos);
+				setRpm(1); // Reset RPM to baseline
 			}
 			if (message.gameStage === GameLoop.NO_MORE_BETS) {
 				setTimeout(() => {

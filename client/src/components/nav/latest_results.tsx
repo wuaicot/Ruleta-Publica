@@ -23,15 +23,18 @@ export const LatestResults = observer(() => {
 
     return (
         <div className="latest-results-vertical">
-            <div className="latest-results-title">←</div>
+            <div className="latest-results-title">Top 10</div>
             <div className="results-vertical-list">
                 {history.map((num, index) => (
-                    <div key={index} className={`result-vertical-item ${getNumberColor(num)}`}>
+                    <div 
+                        key={index} 
+                        className={`result-vertical-item ${getNumberColor(num)} ${index === 0 ? 'latest-result-active' : ''}`}
+                    >
                         {num}
+                        
                     </div>
                 ))}
-            </div>
-            <div className="latest-results-title"> ←</div>
+            </div>            
         </div>
     );
 });
