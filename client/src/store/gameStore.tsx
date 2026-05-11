@@ -23,12 +23,23 @@ class GameStore {
 	msg: GameData | null;
 	startingBalance = 1000;
 	balance = 1000;
+	history: number[] = [];
 
 	//actions
 
 	setPlayerId(id: string) {
 		this.playerId = id;
 	}
+
+	addResult(num: number) {
+		if (this.history[0] !== num) {
+			this.history.unshift(num);
+			if (this.history.length > 10) {
+				this.history.pop();
+			}
+		}
+	}
+
 	setBoardItemOccupied(newBoardItem: string) {
 		this.boardItemOccupied = newBoardItem;
 	}
@@ -113,7 +124,9 @@ class GameStore {
 			bets: observable,
 			msg: observable,
 			balance: observable,
+			history: observable,
 			setPlayerId: action.bound,
+			addResult: action.bound,
 			setBoardItemOccupied: action.bound,
 			setChipsTaken: action.bound,
 			setBetLocation: action.bound,

@@ -13,7 +13,7 @@ export const MainScene = () => {
 	const initialBallPos: [number, number, number] = [
 		RADIUS,
 		assetCorrection,
-		-1.50,//-2
+		-2,//-2
 	];
 	const [rpm, setRpm] = useState(1);
 	const [winSpin, setWinSpin] = useState(0);
@@ -23,7 +23,7 @@ export const MainScene = () => {
 	const accelerate = useCallback(() => {
 		setAcc(true);
 		const rpmAccInterval = setInterval(() => {
-            setRpm((prevValue) => (prevValue += 10));// antes 10
+            setRpm((prevValue) => (prevValue += 10));
             	setPos((prevValue) => [
 					prevValue[0] + 0.40,
 					prevValue[1],
@@ -38,13 +38,15 @@ export const MainScene = () => {
 
 	const deccelerate = useCallback(() => {
 		const rpmDecInterval = setInterval(() => {
-			setRpm((prevValue) => (prevValue -= 6.50));//6.50
+			setRpm((prevValue) => (prevValue -= 6.50));
 			setPos((prevValue) => [
 				prevValue[0] - 0.26,
 				prevValue[1],
 				prevValue[2] + .10,
+				
+				
 			]);
-		}, 550);//550
+		}, 550);
 
 		setTimeout(() => {
 			setWinSpin(-gameStore.winSpin.winSpin);

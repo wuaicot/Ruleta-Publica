@@ -11,6 +11,7 @@ import { GameLoop, GameData } from './types';
 import './App.css';
 import { useCallback } from 'react';
 import { observer } from 'mobx-react';
+import { LatestResults } from './components/nav/latest_results';
 
 function App() {
 	const { error, connect, disconnect } = useServer();
@@ -30,6 +31,7 @@ function App() {
 					{/* {loading && <Loader loading={loading} />} */}
 					{error && <Error error={error} />}
 					<Header connect={connect} disconnect={disconnect} />
+					<LatestResults />
 					<Dashboard />
 					<Board />
 					<Chips />
