@@ -1,5 +1,5 @@
 import { Engine, Scene } from 'react-babylonjs';
-import { Vector3 } from '@babylonjs/core';
+import { Vector3, Color3 } from '@babylonjs/core';
 import { Suspense, useState, useEffect, useCallback } from 'react';
 import { RouletteAnimate } from './RouletteAnimate';
 import { Ground } from './Ground';
@@ -103,33 +103,48 @@ export const MainScene = () => {
 	return (
 		<Engine antialias adaptToDeviceRatio canvasId='babylon-canvas'>
 			<Scene>
+				{/* 1. Iluminación Basada en Imágenes (IBL) para reflejos realistas */}
+				<environmentHelper 
+					options={{
+						createGround: false,
+						skyboxSize: 100,
+						skyboxColor: new Color3(0.01, 0.01, 0.01),
+						environmentTexture: 'https://assets.babylonjs.com/environments/studio.env'
+					}} 
+				/>
+
+				{/* 2. Luz de Ambiente Cálida (Simula el salón VIP) */}
 				<hemisphericLight
-					name='light1'
-					intensity={0.2}
+					name='ambient-light'
+					intensity={0.5}
+					groundColor={new Color3(0.1, 0.05, 0.02)} // Reflejo cálido del suelo
 					direction={Vector3.Up()}
 				/>
+
+				{/* 3. Luz de "Joyería" (Destellos en Oro y Madera) */}
+				<pointLight
+					name='jewelry-light'
+					position={new Vector3(0, 8, -12)}
+					intensity={0.8}
+					diffuse={new Color3(1, 0.9, 0.7)} // Tono oro cálido
+				/>
+
 				<freeCamera
 					name='camera1'
 					position={new Vector3(0, cameraY, 0)}
 					setTarget={[Vector3.Zero()]}
 				/>
 
+				{/* 4. Luz de Sombra Refinada */}
 				<directionalLight
 					name='shadow-light'
-					intensity={0.8}
-					direction={
-						new Vector3(
-							(-10 * Math.PI) / 4,
-							(-10 * Math.PI) / 4,
-							-Math.PI,
-						)
-					}
-					position={new Vector3(0, 5, 16)}
+					intensity={0.6}
+					direction={new Vector3(-1, -2, -0.5)}
+					position={new Vector3(5, 12, 10)}
 				>
 					<shadowGenerator
-						mapSize={1024}
-						useBlurExponentialShadowMap
-						blurKernel={64}
+						mapSize={2048}
+						usePercentageCloserFiltering
 						shadowCastChildren
 					>
 						<Suspense fallback={null}>
@@ -142,6 +157,7 @@ export const MainScene = () => {
 						</Suspense>
 					</shadowGenerator>
 				</directionalLight>
+
 				<Suspense fallback={null}>
 					<Ground />
 				</Suspense>
