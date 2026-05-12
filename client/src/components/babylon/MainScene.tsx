@@ -2,7 +2,6 @@ import { Engine, Scene } from 'react-babylonjs';
 import { Vector3, Color3 } from '@babylonjs/core';
 import { Suspense, useState, useEffect, useCallback } from 'react';
 import { RouletteAnimate } from './RouletteAnimate';
-import { Ground } from './Ground';
 import { gameStore } from '../../store/gameStore';
 import { GameLoop } from '../../types';
 
@@ -103,21 +102,21 @@ export const MainScene = () => {
 	return (
 		<Engine antialias adaptToDeviceRatio canvasId='babylon-canvas'>
 			<Scene>
-				{/* 1. Iluminación Basada en Imágenes (IBL) para reflejos realistas */}
+				{/* 1. Entorno Espacial: Skybox de Estrellas y Nebulosa sutil */}
 				<environmentHelper 
 					options={{
 						createGround: false,
-						skyboxSize: 100,
-						skyboxColor: new Color3(0.01, 0.01, 0.01),
+						skyboxSize: 1000,
+						skyboxColor: new Color3(0, 0, 0.05),
 						environmentTexture: 'https://assets.babylonjs.com/environments/studio.env'
 					}} 
 				/>
 
-				{/* 2. Luz de Ambiente Cálida (Simula el salón VIP) */}
+				{/* 2. Luz de Estrellas Lejanas (Luz de Ambiente Fría) */}
 				<hemisphericLight
-					name='ambient-light'
-					intensity={0.5}
-					groundColor={new Color3(0.1, 0.05, 0.02)} // Reflejo cálido del suelo
+					name='star-light'
+					intensity={1}
+					groundColor={new Color3(0, 0, 0.1)} // Reflejo azul espacial
 					direction={Vector3.Up()}
 				/>
 
@@ -158,9 +157,6 @@ export const MainScene = () => {
 					</shadowGenerator>
 				</directionalLight>
 
-				<Suspense fallback={null}>
-					<Ground />
-				</Suspense>
 			</Scene>
 		</Engine>
 	);

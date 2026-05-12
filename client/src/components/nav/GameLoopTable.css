@@ -1,36 +1,98 @@
 .table-container {
-    border: 0.125em solid rgb(255, 173, 0);
-    border-radius: 8px;
-    box-shadow: 0 0 0.5em 0 rgb(255, 173, 0);
-    color: var(--color-accent);
-    text-shadow: 0 0 0.125em hsl(0 0% 100% / 0.5), 0 0 0.45em rgb(255, 173, 0);
-    padding: 0.7em 1.25em;
-    overflow-y: hidden;
+    background: rgba(10, 11, 30, 0.6);
+    border: 1px solid rgba(255, 173, 0, 0.3);
+    border-radius: 4px;
+    padding: 1.5rem;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    font-family: var(--font-technical);
+    
 }
 
-.bar-container {
-    height: 1em;
-    overflow: hidden;
-    border-radius: 8px;
-    box-shadow: inset 0 0 0.7em 0 rgb(255, 173, 0), 0 0 0.7em 0 rgb(255, 173, 0);
+.table-container::before {
+    content: "MISSION_TELEMETRY_V2.0";
+    font-size: 0.6rem;
+    opacity: 0.5;
+    letter-spacing: 2px;
+    margin-bottom: -0.5rem;
 }
 
 .game-stage {
-    font-size: 1.5em;
-    text-align: center;
-    padding-bottom: 0.5em;
+    font-size: 1.2rem;
+    text-align: left;
+    color: var(--color-accent);
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    padding-bottom: 0.2rem;
+    border-bottom: 1px solid rgba(255, 173, 0, 0.2);
+}
+
+.bar-container {
+    height: 4px;
+    overflow: hidden;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 2px;
 }
 
 .winners-list {
     list-style: none;
-    font-size: 1.5em;
-    padding-top: 0.5em;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+.winner-item-wrapper {
+    padding: 0.5rem;
+    background: rgba(255, 255, 255, 0.02);
+    border-left: 2px solid rgba(255, 255, 255, 0.1);
+    transition: all 0.3s ease;
 }
 
 .winner-item {
-    font-size: 0.7em;
+    font-size: 0.75rem;
+    color: #e0e6ed;
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
 }
 
 .winner-item-mine {
-    color: red;
+    background: rgba(0, 255, 100, 0.05);
+    border-left: 2px solid #00ff64;
+    padding: 0.5rem;
+    font-size: 0.75rem;
+}
+
+.winner-item-mine .win {
+    color: #00ff64;
+    font-weight: 700;
+}
+
+.user-id {
+    font-size: 0.6rem;
+    opacity: 0.7;
+    text-transform: uppercase;
+}
+
+.win {
+    font-size: 0.9rem;
+    letter-spacing: 1px;
+}
+
+/* Scrollbar técnica */
+.winners-list::-webkit-scrollbar {
+    width: 4px;
+}
+
+.winners-list::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.2);
+}
+
+.winners-list::-webkit-scrollbar-thumb {
+    background: rgba(255, 173, 0, 0.3);
+    border-radius: 2px;
 }

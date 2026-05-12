@@ -1,3 +1,5 @@
+import { Vector3 } from '@babylonjs/core';
+
 export const assetsURL = {
 	orange: './assets/chip-10.png',
 	green: './assets/chip-25.png',
@@ -76,3 +78,5 @@ export const EVENTS = {
 		STAGE_CHANGE: 'stage_change',
 	},
 };
+
+export const ROULETTE_POSITION = new Vector3(0, 0, -10); // Posición centrada según preferencia del usuario

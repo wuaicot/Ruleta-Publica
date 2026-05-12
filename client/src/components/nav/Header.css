@@ -1,37 +1,81 @@
-@import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600&display=swap');
-
 .header {
 	display: flex;
 	align-items: center;
 	justify-content: space-between;
-	height: 100px;
-	width: 80svw;
+	height: 60px; /* Más compacto, como un HUD */
+	width: 100vw;
+	padding: 0 2rem;
+	background: rgba(10, 11, 30, 0.7);
+	backdrop-filter: blur(10px);
+	border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+	box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
+	position: fixed;
+	top: 0;
+	z-index: 1000;
 }
 
 .logo {
-	height: calc(1rem + 0.7rem + 1.4rem);
-	font-family: 'Dancing Script', cursive;
-	letter-spacing: 2px;
-	font-size: 1.5em;
+	height: auto;
+	font-family: var(--font-technical);
+	letter-spacing: 4px;
+	font-size: 1.1rem;
+	font-weight: 700;
+	text-transform: uppercase;
+	color: var(--color-accent);
 	display: flex;
 	align-items: center;
+	background: none !important;
+	border: none !important;
+	padding: 0 !important;
+	box-shadow: none !important;
 }
 
-a {
-	text-decoration: none;
+.logo::before {
+	content: "SYS_";
+	opacity: 0.5;
+	font-weight: 400;
 }
 
 .audio-login-container {
 	display: flex;
 	align-items: center;
-	justify-content: space-between;
-	gap: 1em;
-	min-width: 15%;
+	justify-content: flex-end;
+	gap: 1.5rem;
 }
 
 .stats-toggle-button {
-	height: 34px;
-	font-size: 0.75rem;
-	padding: 0 0.7rem;
-	margin-left: 800px;
+	height: 30px;
+	font-family: var(--font-technical);
+	font-size: 0.7rem;
+	text-transform: uppercase;
+	letter-spacing: 1px;
+	background: rgba(255, 255, 255, 0.05) !important;
+	border: 1px solid rgba(255, 255, 255, 0.2) !important;
+	color: #e0e6ed !important;
+	transition: all 0.3s ease;
+}
+
+.stats-toggle-button:hover {
+	background: rgba(255, 255, 255, 0.1) !important;
+	border-color: var(--color-accent) !important;
+}
+
+.login-button, .logout-button {
+	height: 30px;
+	font-family: var(--font-technical);
+	font-size: 0.7rem;
+	text-transform: uppercase;
+	padding: 0 1rem !important;
+	background: rgba(255, 173, 0, 0.1) !important;
+	border: 1px solid var(--color-accent) !important;
+	color: var(--color-accent) !important;
+}
+
+.login-button:hover, .logout-button:hover {
+	background: var(--color-accent) !important;
+	color: #000 !important;
+}
+
+a {
+	text-decoration: none;
 }

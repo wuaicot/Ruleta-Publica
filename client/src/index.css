@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Inter:wght@300;500;700&display=swap');
+
 * {
     box-sizing: border-box;
     margin: 0;
@@ -5,42 +7,69 @@
 }
 
 :root {
-    --color-bg: rgba(31, 37, 10);
-    --color-accent: rgb(255, 173, 0);
-    --border-radius: 0.125em;
+    --color-bg: #020205;
+    --color-accent: #ffad00;
+    --border-radius: 4px;
+    --font-technical: 'JetBrains Mono', monospace;
+    --font-ui: 'Inter', sans-serif;
+}
+
+body {
+    margin: 0;
+    background-color: var(--color-bg);
+    color: #e0e6ed;
+    font-family: var(--font-ui);
+    overflow: hidden;
+    -webkit-font-smoothing: antialiased;
 }
 
 .App {
     height: 100vh;
     width: 100vw;
-    background-color: var(--color-bg);
-    background-image: radial-gradient(
-            rgba(1, 67, 30),
-            rgba(1, 109, 41, 0.2) 2px,
-            transparent 40px
-        ),
-        radial-gradient(
-            rgba(51, 49, 22),
-            rgba(1, 109, 41, 0.15) 1px,
-            transparent 30px
-        ),
-        radial-gradient(
-            rgba(51, 49, 22),
-            rgba(1, 109, 41, 0.1) 2px,
-            transparent 40px
-        ),
-        radial-gradient(
-            rgba(51, 49, 22, 0.4),
-            rgba(1, 109, 41, 0.1) 2px,
-            transparent 30px
-        );
-    background-size: 550px 550px, 350px 350px, 250px 250px, 150px 150px;
-    background-position: 0 0, 40px 60px, 130px 270px, 70px 100px;
+    background: radial-gradient(circle at center, #0a0b1e 0%, #020205 100%);
+    position: relative;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: space-between;
 }
-.latest-results-title{    
-    margin-top: 12px;       
+
+/* Efecto de Campo de Estrellas ISS */
+
+@keyframes space-drift {
+    from { transform: translate(0, 0); }
+    to { transform: translate(-50%, -50%); }
 }
+
+.App > * {
+    z-index: 1; /* Asegura que la UI esté sobre las estrellas */
+}
+
+.latest-results-title {    
+    margin-top: 12px;
+    font-family: var(--font-technical);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    font-size: 0.8rem;
+    color: var(--color-accent);
+}
+
+/* Integración del Canvas 3D */
+#babylon-canvas {
+    outline: none;
+    border: none;
+    min-height: 353px !important; /* Altura mínima forzada */
+    height: 100% !important;
+    width: 100% !important;
+    /* Efecto de línea de escaneo muy tenue para estética HUD */
+    background: linear-gradient(
+        to bottom, 
+        rgba(255, 255, 255, 0) 50%, 
+        rgba(0, 0, 0, 0.05) 50%
+    );
+    background-size: 100% 4px;
+    /* Filtro para que el oro resalte contra el fondo espacial */
+
+    
+}
+
