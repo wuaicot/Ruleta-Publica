@@ -1,7 +1,7 @@
 .dashboard {
     display: grid;
     grid-template-columns: 65% 35%;
-    height: 350px; /* Aumentado de 350px a 500px */
+    height: 400px;
     width: 95vw;
     margin-top: 90px; /* Espacio para el Header fijo */
     gap: 1rem;
@@ -9,6 +9,4 @@
     border: 1px solid rgba(255, 255, 255, 0.05);
     border-radius: var(--border-radius);
     padding: 7px;
-    
-    
 }

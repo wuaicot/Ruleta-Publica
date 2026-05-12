@@ -1,10 +1,10 @@
 .latest-results-vertical {
     position: fixed;
-    right: 100px;
-    top: 35%;
+    right: 2px;
+    top: 58%;
     transform: translateY(-50%);
     width: 80px;
-    background-color: #2E2013;
+    background-color: #2E2013/50;
     border-style: groove;
     display: flex;
     flex-direction: column;
