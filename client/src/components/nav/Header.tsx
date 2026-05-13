@@ -47,7 +47,7 @@ export const Header = (props: HeaderProps) => {
         rel="noreferrer"
         target="blank"
       >
-        <Button className="logo">Ruleta Pública</Button>
+        <Button className="logo">Misiòn Ruleta</Button>
       </a>
       <Button className="stats-toggle-button" onClick={toggleStats}>
         Mi info
@@ -65,7 +65,7 @@ export const Header = (props: HeaderProps) => {
         )}
         <Audio url={assetsURL.soundtrack} loop={true} />
       </div>
-      <PlayerStatsDrawer isOpen={showStats} />
+      <PlayerStatsDrawer isOpen={showStats} onClose={() => setShowStats(false)} />
     </nav>
   );
 };

@@ -9,4 +9,9 @@
     border: 1px solid rgba(255, 255, 255, 0.05);
     border-radius: var(--border-radius);
     padding: 7px;
+    pointer-events: none; /* Bloqueamos el contenedor base */
+}
+
+.dashboard > * {
+    pointer-events: all; /* Pero permitimos interacción en sus hijos (BabylonApp y GameLoopTable) */
 }

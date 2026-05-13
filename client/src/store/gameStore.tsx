@@ -69,6 +69,10 @@ class GameStore {
 		this.balance = this.balance - roundBet + winAmount;
 	}
 
+	syncBalance(newBalance: number) {
+		this.balance = newBalance;
+	}
+
 	resetSessionBalance() {
 		this.balance = this.startingBalance;
 	}
@@ -134,6 +138,7 @@ class GameStore {
 			setMsg: action.bound,
 			setBoardClear: action.bound,
 			applyRoundSettlement: action.bound,
+			syncBalance: action.bound,
 			resetSessionBalance: action.bound,
 			newBet: computed,
 			gameData: computed,

@@ -35,9 +35,9 @@ export const RouletteMesh = (props: BabylonMeshProps) => {
 			walnutTexture.vScale = 1;
 			woodMat.albedoTexture = walnutTexture;
 			woodMat.albedoColor = new Color3(1, 1, 1); 
-			woodMat.roughness = 0.15;
+			woodMat.roughness = 0.4; // Menos brillante para evitar destellos agresivos
 			woodMat.metallic = 0.0;
-			woodMat.environmentIntensity = 1.2;
+			woodMat.environmentIntensity = 0.5; // Reducido drásticamente para evitar distorsión
 		}
 
 		const fabricMat = scene.getMaterialByName('CC0TexturesFabric0332K-JPG') as PBRMaterial;
@@ -90,10 +90,10 @@ export const RouletteMesh = (props: BabylonMeshProps) => {
 					goldTexture.vScale = 2;
 					
 					mat.albedoTexture = goldTexture;
-					mat.albedoColor = new Color3(1, 0.85, 0.4); // Tinte cálido para unificar la textura
+					mat.albedoColor = new Color3(1, 0.85, 0.4); 
 					mat.metallic = 1.0;
-					mat.roughness = 0.15; // Un poco de rugosidad para capturar matices de la textura
-					mat.environmentIntensity = 1.8; // Aumentamos la interacción con la luz ambiental
+					mat.roughness = 0.3; // Aumentado para dispersar reflejos
+					mat.environmentIntensity = 0.6; // Reducido para evitar distorsión visual
 					mat.useMicroSurfaceFromReflectivityMapAlpha = true;
 					mat.reflectivityColor = new Color3(1, 0.9, 0.6); // Reflejos dorados profundos
 				}

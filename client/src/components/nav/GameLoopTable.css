@@ -1,20 +1,25 @@
 .table-container {
-    background: rgba(10, 11, 30, 0.6);
+    background: rgba(10, 11, 30, 0.85);
     border: 1px solid rgba(255, 173, 0, 0.3);
     border-radius: 4px;
     padding: 1.5rem;
     display: flex;
     flex-direction: column;
     gap: 1rem;
-    font-family: var(--font-technical);
+    font-family: 'Courier New', Courier, monospace;
     height: 100%;
     overflow: hidden;
+    pointer-events: all !important; /* Siempre interactivo */
+    backdrop-filter: blur(5px);
+    margin-right:80px;
+    
 }
 
 .table-container::before {
     content: "MISSION_TELEMETRY_V2.0";
     font-size: 0.6rem;
-    opacity: 0.5;
+    color: #ffad00;
+    opacity: 0.8;
     letter-spacing: 2px;
     margin-bottom: -0.5rem;
 }
@@ -22,7 +27,7 @@
 .game-stage {
     font-size: 12px;
     text-align: left;
-    color: var(--color-accent);
+    color: #ffad00;
     text-transform: uppercase;
     letter-spacing: 3px;
     padding-bottom: 0.2rem;
@@ -30,12 +35,19 @@
     flex-shrink: 0;
 }
 
-.bar-container {
+.progress-container {
     height: 4px;
     overflow: hidden;
-    background: rgba(255, 255, 255, 0.05);
+    background: rgba(255, 173, 0, 0.1);
     border-radius: 2px;
     flex-shrink: 0;
+    position: relative;
+}
+
+.progress-bar {
+    height: 100%;
+    background-color: rgb(255, 173, 0);
+    transition: width 1s linear;
 }
 
 .winners-list {
@@ -45,14 +57,23 @@
     gap: 0.5rem;
     overflow-y: auto;
     flex: 1;
-    max-height: 140px; /* Altura aproximada para 2 usuarios antes de activar scroll */
+    height: 180px; /* Altura fija para aprox 2.5 items, activando scroll al 3ero */
+    max-height: 180px; 
+    pointer-events: all;
+    scrollbar-width: thin;
+    scrollbar-color: #ffad00 rgba(255, 173, 0, 0.1);
 }
 
 .winner-item-wrapper {
     padding: 0.5rem;
-    background: rgba(255, 255, 255, 0.02);
-    border-left: 2px solid rgba(255, 255, 255, 0.1);
+    background: rgba(255, 255, 255, 0.03);
+    border-left: 2px solid rgba(255, 173, 0, 0.1);
     transition: all 0.3s ease;
+}
+
+.winner-item-wrapper:hover {
+    background: rgba(255, 173, 0, 0.05);
+    border-left: 2px solid #ffad00;
 }
 
 .winner-item {
@@ -64,15 +85,17 @@
 }
 
 .winner-item-mine {
-    background: rgba(0, 255, 100, 0.05);
-    border-left: 2px solid #00ff64;
+    background: rgba(255, 173, 0, 0.08);
+    border-left: 2px solid #ffad00;
     padding: 0.5rem;
     font-size: 0.75rem;
+    box-shadow: inset 0 0 10px rgba(255, 173, 0, 0.05);
 }
 
 .winner-item-mine .win {
-    color: #00ff64;
+    color: #ffad00;
     font-weight: 700;
+    text-shadow: 0 0 8px rgba(255, 173, 0, 0.4);
 }
 
 .user-id {

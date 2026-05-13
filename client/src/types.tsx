@@ -8,6 +8,7 @@ export interface GameData {
     gameTimer: number;
     winningNumber: number | undefined;
     winners: Winner[];
+    balances?: Record<string, number>;
 }
 
 export enum GameLoop {

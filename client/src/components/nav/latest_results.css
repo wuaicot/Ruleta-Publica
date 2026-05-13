@@ -1,6 +1,6 @@
 .latest-results-vertical {
     position: fixed;
-    right: 2px;
+    right: 12px;
     top: 58%;
     transform: translateY(-50%);
     width: 80px;

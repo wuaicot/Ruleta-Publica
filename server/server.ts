@@ -40,23 +40,55 @@ const usersData: ClientData[] = [];
 const uniqueData: ClientData[] = [];
 /** Maps Socket.IO connection id → client playerId so disconnect removes the right winner row */
 const socketPlayerIds = new Map<string, string>();
+/** Maps playerId → current balance */
+const userBalances = new Map<string, number>();
 
-const sendGameData = (gameData: GameData) => {
+const INITIAL_BALANCE = 1000;
+
+const sendGameData = (gameData: GameData & { userBalances?: Record<string, number> }) => {
 	io.emit(EVENTS.SERVER.STAGE_CHANGE, JSON.stringify(gameData));
 };
 
-const saveClientsData = (data: string) => {
-	clientData = JSON.parse(data);
+const saveClientsData = (socketId: string, data: string) => {
+	const incomingData: ClientData = JSON.parse(data);
+	const pid = incomingData.playerId;
+
+	if (!pid) return;
+
+	// Initialize balance if new user
+	if (!userBalances.has(pid)) {
+		userBalances.set(pid, INITIAL_BALANCE);
+	}
+
+	const currentBalance = userBalances.get(pid) || 0;
+	const totalBet = incomingData.bets.reduce((sum, bet) => sum + bet.betAmount, 0);
+
+	// Security Validation: Ensure user has enough balance
+	if (totalBet > currentBalance) {
+		console.log(`[SECURITY] Player ${pid} attempted to bet ${totalBet} with balance ${currentBalance}`);
+		// In a real scenario, we might want to send an error event back to this specific socket
+		return;
+	}
+
+	clientData = incomingData;
 	usersData.push(clientData);
 };
 
 timer.addEventListener('secondsUpdated', function () {
 	const currentTime = timer.getTimeValues().seconds;
-	const gameData: GameData = {
+	
+	// Prepare balance record for the current connected users to sync UI
+	const balancesRecord: Record<string, number> = {};
+	userBalances.forEach((bal, id) => {
+		balancesRecord[id] = bal;
+	});
+
+	const gameData: GameData & { balances?: Record<string, number> } = {
 		gameStage: gameStage,
 		gameTimer: currentTime,
 		winningNumber: winningNumber,
 		winners: winners,
+		balances: balancesRecord,
 	};
 	sendGameData(gameData);
 	switch (currentTime) {
@@ -73,11 +105,25 @@ timer.addEventListener('secondsUpdated', function () {
 			break;
 		case 40:
 			calculateWinners(winners, uniqueData, winningNumber);
+			// Update balances based on wins/losses
+			uniqueData.forEach(client => {
+				const pid = client.playerId;
+				const currentBalance = userBalances.get(pid) || 0;
+				const totalBet = client.bets.reduce((sum, bet) => sum + bet.betAmount, 0);
+				const winAmount = winners.find(w => w.playerId === pid)?.win || 0;
+				
+				// New Balance = Old Balance - Total Bet + Win
+				userBalances.set(pid, currentBalance - totalBet + winAmount);
+			});
 			gameStage = GameLoop.WINNER;
 			break;
 		case 50:
 			resetBoard(winners, uniqueData);
 			gameStage = GameLoop.EMPTY_BOARD;
+			break;
+		case 55:
+			timer.reset();
+			break;
 	}
 	return;
 });
@@ -85,13 +131,13 @@ timer.addEventListener('secondsUpdated', function () {
 io.on(EVENTS.CONNECTION, (socket: Socket) => {
 	socket.on(EVENTS.CLIENT.JOIN_GAME, (data: string) => {
 		timer.start();
-		saveClientsData(data);
+		saveClientsData(socket.id, data);
 		if (clientData.playerId) {
 			socketPlayerIds.set(socket.id, clientData.playerId);
 		}
 	});
 	socket.on(EVENTS.CLIENT.CLIENT_DATA, (data: string) => {
-		saveClientsData(data);
+		saveClientsData(socket.id, data);
 		const pid = clientData.playerId;
 		if (pid) {
 			socketPlayerIds.set(socket.id, pid);

@@ -1,9 +1,12 @@
 import { observer } from 'mobx-react';
+import { useEffect } from 'react';
 import { gameStore } from '../../store/gameStore';
+// @ts-ignore: import CSS side-effect without type declarations
 import './PlayerStatsDrawer.css';
 
 interface PlayerStatsDrawerProps {
 	isOpen: boolean;
+	onClose: () => void;
 }
 
 const formatCurrency = (value: number) => {
@@ -15,9 +18,18 @@ const formatCurrency = (value: number) => {
 };
 
 export const PlayerStatsDrawer = observer((props: PlayerStatsDrawerProps) => {
-	const { isOpen } = props;
+	const { isOpen, onClose } = props;
 	const profitOrLoss = gameStore.totalProfitOrLoss;
 	const profitLossLabel = profitOrLoss >= 0 ? 'Ganancia total' : 'Perdida total';
+
+	useEffect(() => {
+		if (isOpen) {
+			const timer = setTimeout(() => {
+				onClose();
+			}, 3000);
+			return () => clearTimeout(timer);
+		}
+	}, [isOpen, onClose]);
 
 	return (
 		<aside className={isOpen ? 'player-stats open' : 'player-stats'}>

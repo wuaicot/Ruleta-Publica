@@ -29,6 +29,12 @@ export const useServer = () => {
 				socket.on(EVENTS.SERVER.STAGE_CHANGE, (value: string) => {
 					const message: GameData = JSON.parse(value);
 					setMsg(message);
+
+					// Sync authoritative balance from server
+					if (message.balances && gameStore.playerId && message.balances[gameStore.playerId] !== undefined) {
+						gameStore.syncBalance(message.balances[gameStore.playerId]);
+					}
+
 					const currentStage = message.gameStage;
 					const previousStage = prevStageRef.current;
 					if (

@@ -1,6 +1,5 @@
-import { useContext, useEffect, useState, useCallback } from "react";
+import { useContext, useCallback } from "react";
 import { observer } from "mobx-react";
-import ProgressTimer from "react-progress-bar-timer";
 import { GameContext, gameStore } from "../../store/gameStore";
 import { GameLoop, GameData, Winner } from "../../types";
 import "./GameLoopTable.css";
@@ -11,21 +10,7 @@ function winnerItemClassName(winnerId: string, playerId: string): string {
 
 export const GameLoopTable = observer(() => {
     const { setBoardClear } = useContext(GameContext);
-    const [started, setStarted] = useState(false);
-    const [gameTime, setGameTime] = useState(25);
     const message = gameStore.msg;
-
-    useEffect(() => {
-        if (message) {
-            if (message.gameTimer <= 25) {
-                setStarted(true);
-                setGameTime(25 - message.gameTimer);
-            } else {
-                setStarted(false);
-                return;
-            }
-        }
-    }, [message]);
 
     const getContent = useCallback((message: GameData) => {
         let content;
@@ -39,37 +24,62 @@ export const GameLoopTable = observer(() => {
                 message.winningNumber &&
                 message.gameStage === GameLoop.SPIN_WHEEL
             ) {
-                content = `Get ready for some magic`;
+                content = `Atenciòn a la ruleta`;
             } else if (
                 message.winningNumber &&
                 message.gameStage === GameLoop.WINNER
             ) {
-                content = `Winnig number is: ${message.winningNumber}`;
+                content = `El numero ganador es ${message.winningNumber}`;
             } else if (
                 message.winningNumber &&
                 message.gameStage === GameLoop.EMPTY_BOARD
             ) {
                 setBoardClear();
-                content = "Get ready for next round";
+                content = "Prepàrece para la siguiente ronda";
             }
             return content;
         }
     }, [setBoardClear]);
+
+    const getStageStart = (stage: string | undefined): number => {
+        switch (stage) {
+            case GameLoop.PLACE_BET: return 0;
+            case GameLoop.NO_MORE_BETS: return 25;
+            case GameLoop.SPIN_WHEEL: return 28;
+            case GameLoop.WINNER: return 40;
+            case GameLoop.EMPTY_BOARD: return 50;
+            default: return 0;
+        }
+    };
+
+    const getDurationForStage = (stage: string | undefined): number => {
+        switch (stage) {
+            case GameLoop.PLACE_BET: return 25;
+            case GameLoop.NO_MORE_BETS: return 3;
+            case GameLoop.SPIN_WHEEL: return 12;
+            case GameLoop.WINNER: return 10;
+            case GameLoop.EMPTY_BOARD: return 5;
+            default: return 25;
+        }
+    };
+
+    const calculateWidth = (message: GameData): number => {
+        const stageStart = getStageStart(message.gameStage);
+        const total = getDurationForStage(message.gameStage);
+        const elapsedInStage = Math.max(0, message.gameTimer - stageStart);
+        const percentage = Math.max(0, Math.min(100, ((total - elapsedInStage) / total) * 100));
+        return percentage;
+    };
 
     return (
         <div className="table-container">
             {message && (
                 <>
                     <h2 className="game-stage">{getContent(message)}</h2>
-                    <div className="bar-container">
-                        <ProgressTimer
-                            started={started}
-                            label=""
-                            duration={gameTime}
-                            barRounded={false}
-                            color={"rgb(255, 173, 0)"}
-                            variant="empty"
-                            direction="left"
+                    <div className="progress-container">
+                        <div 
+                            className="progress-bar"
+                            style={{ width: `${calculateWidth(message)}%` }}
                         />
                     </div>
                     <ul className="winners-list">
