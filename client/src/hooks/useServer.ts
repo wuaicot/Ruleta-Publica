@@ -27,6 +27,7 @@ export const useServer = () => {
 				});
 
 				socket.on(EVENTS.SERVER.STAGE_CHANGE, (value: string) => {
+					console.log("Socket STAGE_CHANGE received:", value);
 					const message: GameData = JSON.parse(value);
 					setMsg(message);
 
@@ -48,10 +49,14 @@ export const useServer = () => {
 						gameStore.applyRoundSettlement(myWinner?.win ?? 0);
 					}
 					prevStageRef.current = currentStage;
-					socket.emit(
-						EVENTS.CLIENT.CLIENT_DATA,
-						JSON.stringify(gameStore.gameData),
-					);
+					
+					// Solo enviar si el usuario tiene balance suficiente o no está apostando más de lo permitido
+					if (gameStore.totalBetAmount <= gameStore.balance) {
+						socket.emit(
+							EVENTS.CLIENT.CLIENT_DATA,
+							JSON.stringify(gameStore.gameData),
+						);
+					}
 				});
 
 				socket.on(EVENTS.SERVER.JOINED_GAME, (value: string) => {

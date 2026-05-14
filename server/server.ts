@@ -76,7 +76,7 @@ const saveClientsData = (socketId: string, data: string) => {
 
 timer.addEventListener('secondsUpdated', function () {
 	const currentTime = timer.getTimeValues().seconds;
-	
+
 	// Prepare balance record for the current connected users to sync UI
 	const balancesRecord: Record<string, number> = {};
 	userBalances.forEach((bal, id) => {
@@ -129,8 +129,9 @@ timer.addEventListener('secondsUpdated', function () {
 });
 
 io.on(EVENTS.CONNECTION, (socket: Socket) => {
+	console.log("Client connected:", socket.id);
 	socket.on(EVENTS.CLIENT.JOIN_GAME, (data: string) => {
-		timer.start();
+		console.log("JOIN_GAME received from:", socket.id);
 		saveClientsData(socket.id, data);
 		if (clientData.playerId) {
 			socketPlayerIds.set(socket.id, clientData.playerId);
@@ -151,6 +152,10 @@ io.on(EVENTS.CONNECTION, (socket: Socket) => {
 		const pid = socketPlayerIds.get(socket.id);
 		socketPlayerIds.delete(socket.id);
 		if (!pid) return;
+		
+		const userIndex = usersData.findIndex((u) => u.playerId === pid);
+		if (userIndex !== -1) usersData.splice(userIndex, 1);
+
 		const indexToRemove = winners.findIndex((w) => w.playerId === pid);
 		if (indexToRemove !== -1) {
 			winners.splice(indexToRemove, 1);
@@ -160,4 +165,5 @@ io.on(EVENTS.CONNECTION, (socket: Socket) => {
 
 httpServer.listen(port, host, () => {
 	console.log('server is running on port 8888');
+	timer.start();
 });

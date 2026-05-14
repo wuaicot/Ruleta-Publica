@@ -11,13 +11,13 @@ export const isUserDataUnique = (
 	uniqueData: ClientData[],
 	usersData: ClientData[],
 ) => {
-	const reverse = usersData.reverse();
-	for (let i = 0; i < reverse.length; i++) {
-		if (
-			uniqueData.length === 0 ||
-			!isIdUnique(uniqueData, reverse[i].playerId).includes(false)
-		) {
-			uniqueData.push(reverse[i]);
+	uniqueData.splice(0, uniqueData.length);
+	const seen = new Set<string>();
+	// Recorremos desde el final para obtener los datos más recientes, sin mutar usersData
+	for (let i = usersData.length - 1; i >= 0; i--) {
+		if (!seen.has(usersData[i].playerId)) {
+			uniqueData.push(usersData[i]);
+			seen.add(usersData[i].playerId);
 		}
 	}
 };
@@ -193,7 +193,7 @@ export const calculateWin = (winningNumber: number, bets: Bet[]) => {
 		) {
 			win += userBets[i].betAmount * 2;
 		} else if (betType === BetTypes.ZERO && winningNumber === 0) {
-			win += userBets[i].betAmount * 0.5;
+			win += userBets[i].betAmount * 36;
 		}
 	}
 	return win;

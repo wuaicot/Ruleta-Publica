@@ -2,6 +2,7 @@ import { Engine, Scene } from 'react-babylonjs';
 import { Vector3, Color3 } from '@babylonjs/core';
 import { Suspense, useState, useEffect, useCallback } from 'react';
 import { RouletteAnimate } from './RouletteAnimate';
+import { Ground } from './Ground';
 import { gameStore } from '../../store/gameStore';
 import { GameLoop } from '../../types';
 
@@ -55,8 +56,6 @@ export const MainScene = () => {
 		}, 5000);
 	}, []);
 
-	const [lastProcessedStage, setLastProcessedStage] = useState<string | undefined>(undefined);
-
 	useEffect(() => {
 		const animateZoom = (targetY: number, duration: number) => {
 			const startY = cameraY;
@@ -80,19 +79,16 @@ export const MainScene = () => {
 			requestAnimationFrame(step);
 		};
 
-		if (message && message.gameStage !== lastProcessedStage) {
-			const currentStage = message.gameStage;
-			setLastProcessedStage(currentStage);
-
-			if (currentStage === GameLoop.WINNER) {
+		if (message) {
+			if (message.gameStage === GameLoop.WINNER) {
 				animateZoom(10, 1200); // Zoom in más rápido (1.2s)
 			}
-			if (currentStage === GameLoop.EMPTY_BOARD) {
+			if (message.gameStage === GameLoop.EMPTY_BOARD) {
 				setPos(initialBallPos);
 				setRpm(1); 
 				animateZoom(15, 1000); // Zoom out más rápido y "snappy"
 			}
-			if (currentStage === GameLoop.NO_MORE_BETS) {
+			if (message.gameStage === GameLoop.NO_MORE_BETS) {
 				setTimeout(() => {
 					accelerate();
 				}, 3000);
@@ -102,7 +98,7 @@ export const MainScene = () => {
 			}
 		}
 		// eslint-disable-next-line
-	}, [message, lastProcessedStage, accelerate, deccelerate]);
+	}, [message]);
 
 	return (
 		<Engine antialias adaptToDeviceRatio canvasId='babylon-canvas'>
@@ -112,7 +108,7 @@ export const MainScene = () => {
 					options={{
 						createGround: false,
 						skyboxSize: 1000,
-						skyboxColor: new Color3(0, 0, 0.02),
+						skyboxColor: new Color3(0, 0, 0.05),
 						environmentTexture: 'https://assets.babylonjs.com/environments/studio.env'
 					}} 
 				/>
@@ -162,6 +158,9 @@ export const MainScene = () => {
 					</shadowGenerator>
 				</directionalLight>
 
+				<Suspense fallback={null}>
+					<Ground />
+				</Suspense>
 			</Scene>
 		</Engine>
 	);

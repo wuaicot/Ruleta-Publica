@@ -11,6 +11,7 @@ function winnerItemClassName(winnerId: string, playerId: string): string {
 export const GameLoopTable = observer(() => {
     const { setBoardClear } = useContext(GameContext);
     const message = gameStore.msg;
+    console.log("GameLoopTable message:", message);
 
     const getContent = useCallback((message: GameData) => {
         let content;

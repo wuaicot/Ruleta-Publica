@@ -20,12 +20,15 @@ export const Header = (props: HeaderProps) => {
     useContext(GameContext);
 
   const logInHandler = useCallback(() => {
+    console.log("Log In Handler Clicked");
     setLoggedIn(true);
     resetSessionBalance();
     setBoardClear();
     const id = uuidv4();
+    console.log("Generated ID:", id);
     setPlayerId(id);
     connect();
+    console.log("Connect called");
   }, [connect, resetSessionBalance, setBoardClear, setPlayerId]);
 
   const logOutHandler = useCallback(() => {
